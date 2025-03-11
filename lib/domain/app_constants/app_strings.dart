@@ -11,6 +11,9 @@ abstract class AppStrings {
   static const String okButton = 'OK';
   static const String cancelButton = 'Cancel';
   static const String addButton = 'ADD';
+  static const String editButton = 'Edit';
+  static const String deleteButton = 'Delete';
+  static const String saveButton = 'Save';
 
   /// 🌗 Theme Mode Messages
   static const String lightModeEnabled = 'Light Mode Enabled';
@@ -32,4 +35,8 @@ abstract class AppStrings {
   /// 📝 Create ToDo Dialog
   static const String newTodoTitle = 'New ToDo';
   static const String todoInputHint = 'What to do?';
+
+  /// ✏️ Edit ToDo Dialog
+  static const String editTodoTitle = 'Edit ToDo';
+  static const String newTodoDescription = 'New description';
 }

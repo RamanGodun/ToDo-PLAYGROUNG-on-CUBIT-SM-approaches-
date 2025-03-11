@@ -115,3 +115,7 @@ This project is licensed under the **MIT License** – see the [LICENSE](LICENSE
 📌 **Navigation Refactor** – Migrate to **onGenerateRoutes** for scalability.
 
 ---
+
+// also about optimization of LB SS with help of extra Wrapper cubit,
+which "Замість того, щоб в кожному BlocListener викликати метод setFilteredTodos, буде це робити автоматично."
+in UI in Listener then will be only one Cubit

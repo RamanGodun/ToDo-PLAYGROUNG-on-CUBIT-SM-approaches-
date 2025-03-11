@@ -43,6 +43,7 @@ class SearchAndFilterTodo extends StatelessWidget {
             filterButton(context, Filter.completed, AppStrings.filterCompleted),
           ],
         ),
+        Divider(color: Helpers.getColorScheme(context).onSurface, thickness: 3),
       ],
     );
   }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:todo_app_cubit_2ss_playground/ui/widgets/text_widget.dart';
 import '../app_constants/app_constants.dart';
 import '../config/loader/loader_cubit.dart';
 import 'helpers.dart';
@@ -37,7 +38,7 @@ class OverlayNotificationService {
   }
 }
 
-/// 🎭 A beautiful animated overlay widget in macOS/iOS style.
+/// 🎭 A beautiful animated overlay widget.
 class _AnimatedOverlayWidget extends HookWidget {
   final String message;
   final IconData icon;
@@ -76,9 +77,9 @@ class _AnimatedOverlayWidget extends HookWidget {
     return Stack(
       children: [
         Positioned(
-          top: MediaQuery.of(context).padding.top + 50,
-          left: MediaQuery.of(context).size.width * 0.2,
-          right: MediaQuery.of(context).size.width * 0.2,
+          top: MediaQuery.of(context).padding.top + 40,
+          left: MediaQuery.of(context).size.width * 0.05,
+          right: MediaQuery.of(context).size.width * 0.05,
           child: FadeTransition(
             opacity: opacity,
             child: ScaleTransition(
@@ -107,15 +108,7 @@ class _AnimatedOverlayWidget extends HookWidget {
                       Icon(icon, color: textColor, size: 24),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: Text(
-                          message,
-                          style: TextStyle(
-                            color: textColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
+                        child: TextWidget(message, TextType.titleMedium),
                       ),
                     ],
                   ),

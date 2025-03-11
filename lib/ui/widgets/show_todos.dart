@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app_cubit_2ss_playground/domain/app_constants/app_constants.dart';
+import '../../domain/models/todo_model.dart';
 import '../../domain/state/app_settings/app_settings_cubit.dart';
 import '../../domain/utils_and_services/cubits_export.dart';
 import 'todo_item.dart';
@@ -11,7 +13,6 @@ class ShowTodosWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 🔄 Retrieve the current state shape mode dynamically
     final isListenerBasedStateShape = context.select<AppSettingsCubit, bool>(
       (cubit) => cubit.state.isUsingListenerStateShapeForAppFeatures,
     );
@@ -22,7 +23,7 @@ class ShowTodosWidget extends StatelessWidget {
   }
 }
 
-// !Next is with stream subscription state shape
+// ! 🔵 **Stream Subscription-Based State Shape**
 class ShowTodosForStreamSubscriptionStateShape extends StatelessWidget {
   const ShowTodosForStreamSubscriptionStateShape({super.key});
 
@@ -33,30 +34,11 @@ class ShowTodosForStreamSubscriptionStateShape extends StatelessWidget {
         .state
         .filteredTodos;
 
-    return ListView.separated(
-      // ? next two is the alternative using Expanded widget to avoid "unconstrained..." bug
-      primary: false,
-      shrinkWrap: true,
-      itemCount: todos.length,
-      separatorBuilder: (BuildContext context, int index) {
-        return const Divider(color: Colors.grey);
-      },
-      itemBuilder: (BuildContext context, int index) {
-        return Dismissible(
-          key: ValueKey(todos[index].id),
-          background: const DismissibleBackground(0),
-          secondaryBackground: const DismissibleBackground(1),
-          onDismissed: (_) =>
-              context.read<TodoListCubit>().removeTodo(todos[index]),
-          // confirmDismiss: () {},
-          child: TodoItem(todo: todos[index]),
-        );
-      },
-    );
+    return _buildTodoList(context, todos);
   }
 }
 
-// !Next is with Listener state shape
+// ! 🟠 **Listener-Based State Shape**
 class ShowTodosWithListenerStateShape extends StatelessWidget {
   const ShowTodosWithListenerStateShape({super.key});
 
@@ -103,48 +85,23 @@ class ShowTodosWithListenerStateShape extends StatelessWidget {
           },
         ),
       ],
-      child: ListView.separated(
-        primary: false,
-        shrinkWrap: true,
-        itemCount: todos.length,
-        separatorBuilder: (BuildContext context, int index) {
-          return const Divider(color: Colors.grey);
-        },
-        itemBuilder: (BuildContext context, int index) {
-          return Dismissible(
-            key: ValueKey(todos[index].id),
-            background: const DismissibleBackground(0),
-            secondaryBackground: const DismissibleBackground(1),
-            onDismissed: (_) =>
-                context.read<TodoListCubit>().removeTodo(todos[index]),
-            // confirmDismiss: (_) {},
-            child: TodoItem(todo: todos[index]),
-          );
-        },
-      ),
+      child: _buildTodoList(context, todos),
     );
   }
 }
 
-/// 🛠️ [DismissibleBackground] віджет для відображення червоного фону
-/// під час свайпу елементу списку [Todo].
-class DismissibleBackground extends StatelessWidget {
-  final int direction;
-
-  const DismissibleBackground(this.direction, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(4.0),
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      color: Colors.red,
-      alignment: direction == 0 ? Alignment.centerLeft : Alignment.centerRight,
-      child: const Icon(
-        Icons.delete,
-        size: 30.0,
-        color: Colors.white,
-      ),
-    );
-  }
+// ? 🔧 ** Method for list building **
+Widget _buildTodoList(BuildContext context, List<Todo> todos) {
+  return ListView.separated(
+    primary: false,
+    shrinkWrap: true,
+    itemCount: todos.length,
+    separatorBuilder: (BuildContext context, int index) {
+      return const Divider(
+          color: AppConstants.darkSurfaceColor, thickness: 0.5);
+    },
+    itemBuilder: (BuildContext context, int index) {
+      return SlidableTodoItem(todo: todos[index]);
+    },
+  );
 }

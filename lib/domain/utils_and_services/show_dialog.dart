@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../ui/widgets/create_todo_dialog.dart';
+import '../../ui/widgets/create_todo.dart';
+import '../../ui/widgets/edit_todo.dart';
+import '../models/todo_model.dart';
 
 /// 💬 [DialogService] provides reusable dialogs throughout the app.
 abstract class DialogService {
@@ -28,5 +30,15 @@ abstract class DialogService {
     if (Navigator.of(context, rootNavigator: true).canPop()) {
       Navigator.of(context, rootNavigator: true).pop();
     }
+  }
+
+  /// 📝 **Функція для редагування ToDo**
+  static void editTodo(BuildContext context, Todo todo) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return EditTodoDialog(todo: todo);
+      },
+    );
   }
 }

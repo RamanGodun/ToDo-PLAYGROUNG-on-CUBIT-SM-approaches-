@@ -1,88 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:todo_app_cubit_2ss_playground/domain/app_constants/app_constants.dart';
+import 'package:todo_app_cubit_2ss_playground/domain/app_constants/app_strings.dart';
 import '../../domain/models/todo_model.dart';
 import '../../domain/utils_and_services/cubits_export.dart';
+import '../../domain/utils_and_services/show_dialog.dart';
 
-class TodoItem extends StatefulWidget {
+/// 📌 [SlidableTodoItem] - A wrapper around `TodoItem` that adds swipe actions.
+class SlidableTodoItem extends StatelessWidget {
   final Todo todo;
-  const TodoItem({required this.todo, super.key});
+  const SlidableTodoItem({super.key, required this.todo});
 
   @override
-  State<TodoItem> createState() => _TodoItemState();
+  Widget build(BuildContext context) {
+    return Slidable(
+      key: ValueKey(todo.id),
+      startActionPane: ActionPane(
+        motion: const StretchMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (_) => DialogService.editTodo(context, todo),
+            backgroundColor: AppConstants.darkPrimaryColor,
+            foregroundColor: AppConstants.darkForegroundColor,
+            label: AppStrings.editButton,
+          ),
+        ],
+      ),
+      endActionPane: ActionPane(
+        motion: const StretchMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (_) => context.read<TodoListCubit>().removeTodo(todo),
+            backgroundColor: AppConstants.errorColor,
+            foregroundColor: AppConstants.darkForegroundColor,
+            icon: Icons.delete,
+            label: AppStrings.deleteButton,
+          ),
+        ],
+      ),
+      child: TodoItem(todo: todo),
+    );
+  }
 }
 
-class _TodoItemState extends State<TodoItem> {
-  late final TextEditingController textController;
-
-  @override
-  void initState() {
-    super.initState();
-    textController = TextEditingController();
-  }
+/// 📌 [TodoItem] - A single ToDo item in the list.
+class TodoItem extends StatelessWidget {
+  final Todo todo;
+  const TodoItem({super.key, required this.todo});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            bool error = false;
-            textController.text = widget.todo.desc;
-
-            return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-                return AlertDialog(
-                  title: const Text('Edit Todo'),
-                  content: TextField(
-                    controller: textController,
-                    autofocus: true,
-                    decoration: InputDecoration(
-                      errorText: error ? "Value cannot be empty" : null,
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('CANCEL'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          error = textController.text.isEmpty ? true : false;
-                          if (!error) {
-                            context.read<TodoListCubit>().editTodo(
-                                  widget.todo.id,
-                                  textController.text,
-                                );
-
-                            Navigator.pop(context);
-                          }
-                        });
-                      },
-                      child: const Text('EDIT'),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        );
-      },
       leading: Checkbox(
-        value: widget.todo.completed,
-        onChanged: (bool? checked) {
-          context.read<TodoListCubit>().toggleTodo(widget.todo.id);
-        },
+        value: todo.completed,
+        onChanged: (_) => context.read<TodoListCubit>().toggleTodo(todo.id),
       ),
-      title: Text(widget.todo.desc),
+      title: Text(todo.desc),
     );
-  }
-
-  @override
-  void dispose() {
-    textController.dispose();
-    super.dispose();
   }
 }
