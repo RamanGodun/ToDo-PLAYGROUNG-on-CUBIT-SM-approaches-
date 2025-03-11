@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../app_constants/app_constants.dart';
-import '../state/app_settings/loader.dart';
+import '../state/global_loader/loader_cubit.dart';
 import 'helpers.dart';
 
 /// 🌟 [OverlayNotificationService] – Displays animated overlay messages in macOS/iOS style.

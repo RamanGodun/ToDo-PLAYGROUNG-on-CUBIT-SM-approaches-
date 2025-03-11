@@ -4,3 +4,10 @@ enum AppStateShapeManagement {
   withListener, // 🟢 Use "Listener" app's state shape
   withStreamSubscription // 🔵 Use "StreamSubscription" app's state shape
 }
+
+
+enum Filter {
+  all,
+  active,
+  completed,
+}
