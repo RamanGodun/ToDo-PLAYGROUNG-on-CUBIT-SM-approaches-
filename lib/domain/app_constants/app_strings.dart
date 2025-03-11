@@ -3,8 +3,9 @@ abstract class AppStrings {
   /// 🏠 Titles
   static const String appTitle = 'ToDo App';
   static const String homePageTitle = 'Home Page';
-  static const String titleForLSS = 'Todos left (LB SP)';
-  static const String titleForSSSS = 'Todos left (SSB SP)';
+  static const String titleForListenerBasedStateShape = 'Todos left (LB SP)';
+  static const String titleForStreamSubscriptionBasedStateShape =
+      'Todos left (SSB SP)';
 
   /// 🆗 Buttons
   static const String okButton = 'OK';

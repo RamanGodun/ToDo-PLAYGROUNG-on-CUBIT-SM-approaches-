@@ -7,6 +7,10 @@ import '../../domain/app_constants/app_strings.dart';
 import '../../domain/state/app_settings/app_settings_cubit.dart';
 import '../../domain/utils_and_services/helpers.dart';
 import '../../domain/utils_and_services/overlay_service.dart';
+import '../widgets/search_and_filter_todo.dart';
+import '../widgets/show_todos_lss.dart';
+import '../widgets/show_todos_ssss.dart';
+import '../widgets/todo_header.dart';
 
 /// 🏠 [HomePage] - The main screen of the application.
 /// Provides toggles for switching between light/dark themes and state shape modes
@@ -16,17 +20,21 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 🎨 Retrieve the current theme state
+    /// 🎨 Retrieve the current theme state
     final isDarkMode = context.select<AppSettingsCubit, bool>(
       (cubit) => cubit.state.isDarkTheme,
     );
 
-    // 🔄 Retrieve the current state shape mode
+    /// 🔄 Retrieve the current state shape mode
     final isListenerStateShape = context.select<AppSettingsCubit, bool>(
       (cubit) => cubit.state.isUsingListenerStateShapeForAppFeatures,
     );
 
-    // 🎭 Define icons for theme toggle and state shape change
+    final appBarTitle = isListenerStateShape
+        ? AppStrings.titleForListenerBasedStateShape
+        : AppStrings.titleForStreamSubscriptionBasedStateShape;
+
+    /// 🎭 Define icons for theme toggle and state shape change
     final themeIcon =
         isDarkMode ? AppConstants.darkModeIcon : AppConstants.lightModeIcon;
     final stateShapeIcon = isListenerStateShape
@@ -39,12 +47,7 @@ class HomePage extends StatelessWidget {
         appBar: AppBar(
           title: Padding(
             padding: const EdgeInsets.only(left: 45),
-            child: TextWidget(
-              isListenerStateShape
-                  ? AppStrings.titleForLSS
-                  : AppStrings.titleForSSSS,
-              TextType.titleMedium,
-            ),
+            child: TextWidget(appBarTitle, TextType.titleMedium),
           ),
           actions: [
             /// 🌗 Theme toggle button (light/dark mode)
@@ -60,8 +63,16 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        body: const Center(
-          child: TextWidget(AppStrings.homePageTitle, TextType.headline),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: ListView(
+            children: [
+              const TodoHeader(),
+              const SizedBox(height: 20.0),
+              SearchAndFilterTodo(),
+              const ShowTodosWidget(),
+            ],
+          ),
         ),
       ),
     );
@@ -101,7 +112,6 @@ void _toggleStateShape(BuildContext context, bool isListenerStateShape) {
       message: overlayMessage, icon: overlayIcon);
 }
 
-/*
 /// 📦 [ShowTodosWidget] dynamically selects the appropriate Todo list widget
 /// based on the current **State Shape** (ListenerStateShape / StreamSubscriptionStateShape).
 class ShowTodosWidget extends StatelessWidget {
@@ -109,12 +119,13 @@ class ShowTodosWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isListenerStateShape =
-        AppConfig.isAppStateShapeManagementWithListeners;
+    // 🔄 Retrieve the current state shape mode dynamically
+    final isListenerBasedStateShape = context.select<AppSettingsCubit, bool>(
+      (cubit) => cubit.state.isUsingListenerStateShapeForAppFeatures,
+    );
 
-    return isListenerStateShape
+    return isListenerBasedStateShape
         ? const ShowTodosWithListenerStateShape()
         : const ShowTodosForStreamSubscriptionStateShape();
   }
 }
-*/
