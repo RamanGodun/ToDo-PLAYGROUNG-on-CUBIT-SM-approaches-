@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app_cubit_2ss_playground/core/presentation/widgets/text_widget.dart';
+import 'package:todo_app_cubit_2ss_playground/ui/widgets/text_widget.dart';
 
 import '../../domain/app_constants/app_constants.dart';
 import '../../domain/app_constants/app_strings.dart';
-import '../../domain/app_settings_on_cubit/app_settings_cubit.dart';
-import '../../domain/utils/helpers.dart';
+import '../../domain/state/app_settings/app_settings_cubit.dart';
+import '../../domain/utils_and_services/helpers.dart';
+import '../../domain/utils_and_services/overlay_service.dart';
 
 /// 🏠 [HomePage] - The main screen of the application.
 /// Provides toggles for switching between light/dark themes and state shape modes
@@ -36,7 +37,8 @@ class HomePage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Expanded(
+          title: Padding(
+            padding: const EdgeInsets.only(left: 45),
             child: TextWidget(
               isListenerStateShape
                   ? AppStrings.titleForLSS
@@ -54,13 +56,12 @@ class HomePage extends StatelessWidget {
             /// 🔄 State shape toggle button (ListenerStateShape ↔ StreamSubscriptionStateShape)
             IconButton(
               icon: Icon(stateShapeIcon, color: iconColor),
-              onPressed: () =>
-                  context.read<AppSettingsCubit>().toggleStateShape(),
+              onPressed: () => _toggleStateShape(context, isListenerStateShape),
             ),
           ],
         ),
         body: const Center(
-          child: TextWidget('Home Page', TextType.headline),
+          child: TextWidget(AppStrings.homePageTitle, TextType.headline),
         ),
       ),
     );
@@ -70,6 +71,34 @@ class HomePage extends StatelessWidget {
 /// 🕹️ Toggles the theme between light and dark mode.
 void _toggleTheme(BuildContext context, bool isDarkMode) {
   context.read<AppSettingsCubit>().toggleTheme(!isDarkMode);
+
+  // 🌟 Show overlay with correct message and icon
+  final overlayMessage =
+      isDarkMode ? AppStrings.lightModeEnabled : AppStrings.darkModeEnabled;
+  final overlayIcon =
+      isDarkMode ? AppConstants.lightModeIcon : AppConstants.darkModeIcon;
+
+  OverlayNotificationService.showOverlay(
+    context,
+    message: overlayMessage,
+    icon: overlayIcon,
+  );
+}
+
+/// 🔄 Toggles between Listener-Based and StreamSubscription-Based state propagation.
+void _toggleStateShape(BuildContext context, bool isListenerStateShape) {
+  context.read<AppSettingsCubit>().toggleStateShape();
+
+  // 🌟 Show overlay with correct message and icon
+  final overlayMessage = isListenerStateShape
+      ? AppStrings.statePropagationSSS
+      : AppStrings.statePropagationLSS;
+  final overlayIcon = isListenerStateShape
+      ? AppConstants.changeCircleIcon
+      : AppConstants.syncIcon;
+
+  OverlayNotificationService.showOverlay(context,
+      message: overlayMessage, icon: overlayIcon);
 }
 
 /*

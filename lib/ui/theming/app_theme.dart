@@ -11,7 +11,7 @@ abstract class AppThemes {
     primaryColor: AppConstants.darkPrimaryColor,
     scaffoldBackgroundColor: AppConstants.darkScaffoldBackgroundColor,
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppConstants.darkAppBarBackgroundColor,
+      backgroundColor: Color.fromARGB(255, 0, 0, 0),
       centerTitle: true,
       foregroundColor: AppConstants.darkForegroundColor,
       elevation: 0,
@@ -22,7 +22,7 @@ abstract class AppThemes {
     colorScheme: const ColorScheme.dark(
       primary: AppConstants.darkPrimaryColor,
       secondary: AppConstants.secondaryColor4DarkTheme,
-      surface: AppConstants.darkAppBarBackgroundColor,
+      surface: AppConstants.darkSurfaceColor,
       background: AppConstants.darkScaffoldBackgroundColor,
       error: AppConstants.errorColor,
       onPrimary: Colors.white,
@@ -65,7 +65,7 @@ abstract class AppThemes {
     colorScheme: const ColorScheme.light(
       primary: AppConstants.lightPrimaryColor,
       secondary: AppConstants.secondaryColor4LightTheme,
-      surface: AppConstants.lightScaffoldBackgroundColor,
+      surface: Color.fromARGB(189, 216, 215, 215),
       background: AppConstants.lightScaffoldBackgroundColor,
       error: AppConstants.errorColor,
       onPrimary: Colors.black,

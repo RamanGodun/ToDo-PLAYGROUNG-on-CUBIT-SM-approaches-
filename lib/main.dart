@@ -4,12 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'core/domain/app_constants/app_strings.dart';
-import 'core/domain/app_settings_on_cubit/app_settings_cubit.dart';
-import 'core/domain/app_settings_on_cubit/loader.dart';
-import 'core/domain/config/observer/app_bloc_observer.dart';
-import 'core/domain/utils/show_dialog.dart';
-import 'core/presentation/pages/home_page.dart';
+import 'domain/app_constants/app_strings.dart';
+import 'domain/state/app_settings/app_settings_cubit.dart';
+import 'domain/state/app_settings/loader.dart';
+import 'domain/config/observer/app_bloc_observer.dart';
+import 'domain/utils_and_services/show_dialog.dart';
+import 'ui/pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

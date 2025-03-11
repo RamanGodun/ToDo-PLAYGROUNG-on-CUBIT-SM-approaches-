@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../domain/utils/helpers.dart';
+import '../../domain/utils_and_services/helpers.dart';
 
 abstract class TextStyles4ThisAppThemes {
   static TextTheme kTextThemeData(bool isDarkTheme) {

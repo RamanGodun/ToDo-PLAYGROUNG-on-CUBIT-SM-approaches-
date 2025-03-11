@@ -6,6 +6,7 @@ abstract class AppConstants {
   static const Color darkPrimaryColor = Color.fromARGB(134, 0, 156, 203);
   static const Color darkScaffoldBackgroundColor = Color(0xFF181818);
   static const Color darkAppBarBackgroundColor = Color(0xFF212121);
+  static const Color darkSurfaceColor = Color.fromARGB(186, 92, 92, 92);
   static const Color darkForegroundColor = Colors.white;
 
   /// 🎨 Colors for light theme
@@ -21,6 +22,14 @@ abstract class AppConstants {
       Color.fromARGB(255, 91, 101, 106);
   static const Color secondaryColor4LightTheme =
       Color.fromARGB(255, 174, 214, 215);
+
+  /// 🎨 **Overlay Colors**
+  static const Color overlayDarkBackground = Color(0xFF2E2E2E);
+  static const Color overlayLightBackground = Color(0xFFEFEFEF);
+  static const Color overlayDarkTextColor = Colors.white;
+  static const Color overlayLightTextColor = Colors.black;
+  static const Color overlayDarkBorder = Color(0xFF474747);
+  static const Color overlayLightBorder = Color(0xFFD6D6D6);
 
   /// 🛠️ Icons
   static const IconData sunIcon = Icons.sunny;
