@@ -13,80 +13,103 @@ import 'domain/utils_and_services/cubits_export.dart';
 import 'domain/utils_and_services/show_dialog.dart';
 import 'ui/pages/home_page.dart';
 
+/// 🚀 **[main] - Application entry point.**
+/// - Initializes **HydratedBloc** for state persistence.
+/// - Sets up **BlocObserver** for global state monitoring.
+/// - Runs the app wrapped with **StateManagementProvider**.
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Bloc.observer = AppBlocObserver();
-  // Bloc.observer =
-  // GlobalLoaderMiddleware(globalLoaderCubit: GlobalLoaderCubit());
+
+  /// 🌐 **Global Loader Cubit** - Manages loading state across the app.
+  final globalLoaderCubit = GlobalLoaderCubit();
+  // 🛠️ **Set up a global BLoC observer**
+  Bloc.observer = AppBlocObserver(globalLoaderCubit: globalLoaderCubit);
+
+  /// 💾 **Initialize Hydrated Storage** (State Persistence)
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
         ? HydratedStorageDirectory.web
-        : HydratedStorageDirectory((await getTemporaryDirectory()).path),
+        : HydratedStorageDirectory(
+            (await getApplicationDocumentsDirectory()).path),
   );
-  // HydratedBloc.storage.clear(); // ? only in test mode (delete persistence data)
 
-  runApp(const StateManagementProvider());
+  /// 🏁 **Launch the app**
+  runApp(StateManagementProvider(globalLoaderCubit: globalLoaderCubit));
 }
 
+/// 📦 **[StateManagementProvider] - Provides all BLoC dependencies**
+/// - Registers **GlobalLoaderCubit, AppSettingsCubit, Todo Cubits**.
+/// - Manages **Listener-based & Stream Subscription-based** state shapes.
 class StateManagementProvider extends StatelessWidget {
-  const StateManagementProvider({super.key});
+  final GlobalLoaderCubit globalLoaderCubit;
+
+  const StateManagementProvider({super.key, required this.globalLoaderCubit});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AppSettingsCubit>(create: (context) => AppSettingsCubit()),
+        /// 🔄 **Global Loader Provider** (Used for async operations)
+        BlocProvider(create: (_) => globalLoaderCubit),
 
-        BlocProvider<TodoListCubit>(create: (context) => TodoListCubit()),
-        BlocProvider<TodoFilterCubit>(create: (context) => TodoFilterCubit()),
-        BlocProvider<TodoSearchCubit>(create: (context) => TodoSearchCubit()),
+        /// 🎨 **App Settings Provider** (Manages Theme & State Shape)
+        BlocProvider(create: (_) => AppSettingsCubit()),
 
-        /// 🟧 Providers for "Listeners" state-shape
-        BlocProvider<ActiveTodoCountCubitWithUsingListenerStateShape>(
+        /// ✅ **Core Business Logic Providers**
+        BlocProvider(create: (_) => TodoListCubit()),
+        BlocProvider(create: (_) => TodoFilterCubit()),
+        BlocProvider(create: (_) => TodoSearchCubit()),
+
+        /// 🟧 **Providers for Listener-based State Shape**
+        BlocProvider(
             create: (context) =>
                 ActiveTodoCountCubitWithUsingListenerStateShape(
                     todoListCubit: context.read<TodoListCubit>())),
-        BlocProvider<FilteredTodosCubitWithListenerStateShape>(
+        BlocProvider(
             create: (context) => FilteredTodosCubitWithListenerStateShape(
                 initialTodos: context.read<TodoListCubit>().state.todos)),
 
-        /// 🟦 Providers for "Stream Subscription" state-shape
-        BlocProvider<ActiveTodoCountCubitWithUsingStreamSubscriptionStateShape>(
+        /// 🟦 **Providers for Stream Subscription-based State Shape**
+        BlocProvider(
             create: (context) =>
                 ActiveTodoCountCubitWithUsingStreamSubscriptionStateShape(
                     todoListCubit: context.read<TodoListCubit>())),
-        BlocProvider<FilteredTodosCubitWithStreamSubscriptionStateShape>(
+        BlocProvider(
             create: (context) =>
                 FilteredTodosCubitWithStreamSubscriptionStateShape(
                     initialTodos: context.read<TodoListCubit>().state.todos,
-                    todoFilterCubit: BlocProvider.of<TodoFilterCubit>(context),
-                    todoSearchCubit: BlocProvider.of<TodoSearchCubit>(context),
-                    todoListCubit: BlocProvider.of<TodoListCubit>(context))),
+                    todoFilterCubit: context.read<TodoFilterCubit>(),
+                    todoSearchCubit: context.read<TodoSearchCubit>(),
+                    todoListCubit: context.read<TodoListCubit>()))
       ],
-      child: const GlobalLoaderProvider(),
+      child: GlobalLoaderProvider(globalLoaderCubit: globalLoaderCubit),
     );
   }
 }
 
-/// 🎯 [GlobalLoaderProvider] wraps the app with a global loading state management
+/// ⏳ **[GlobalLoaderProvider] - Wraps the app with global loading management**
+/// - Uses **BlocListener** to listen for global loading state changes.
+/// - Displays **Loading Dialog** when loading is active.
 class GlobalLoaderProvider extends StatelessWidget {
-  const GlobalLoaderProvider({super.key});
+  final GlobalLoaderCubit globalLoaderCubit;
+
+  const GlobalLoaderProvider({super.key, required this.globalLoaderCubit});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<GlobalLoaderCubit>(
-      create: (_) => GlobalLoaderCubit(),
-      child: BlocListener<GlobalLoaderCubit, bool>(
-        listener: (context, isLoading) => isLoading
-            ? DialogService.showLoadingDialog(context)
-            : DialogService.closeDialog(context),
-        child: const AppView(),
-      ),
+    return BlocListener<GlobalLoaderCubit, bool>(
+      bloc: globalLoaderCubit,
+      listener: (context, isLoading) => isLoading
+          ? DialogService.showLoadingDialog(context)
+          : DialogService.closeDialog(context),
+      child: const AppView(),
     );
   }
 }
 
-/// 📱 [AppView] builds the main MaterialApp and listens for theme changes
+/// 🎨 **[AppView] - Builds the main MaterialApp**
+/// - Listens for theme changes via **AppSettingsCubit**.
 class AppView extends StatelessWidget {
   const AppView({super.key});
 

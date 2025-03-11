@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../loader/loader_cubit.dart';
 
-/// 🛠️ **[AppBlocObserver]** - Custom observer for monitoring the lifecycle of BLoC and Cubit instances.
-///
+/// 🛠️ **[AppBlocObserver]** - Custom observer for monitoring BLoC/Cubit lifecycle & global loading state.
 /// This observer logs key lifecycle events:
 /// - 🟢 **onCreate**: When a BLoC/Cubit is initialized.
 /// - 📨 **onEvent**: When an event is added to a BLoC.
@@ -9,9 +9,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// - ➡️ **onTransition**: When a BLoC processes a transition (event → state).
 /// - ❌ **onError**: When an error occurs in a BLoC/Cubit.
 /// - 🔴 **onClose**: When a BLoC/Cubit is closed and disposed.
-///
-/// Each log entry is prefixed with a timestamp for better traceability.
 class AppBlocObserver extends BlocObserver {
+  final GlobalLoaderCubit globalLoaderCubit;
+
+  AppBlocObserver({required this.globalLoaderCubit});
+
   /// ⏳ **Generates a timestamp** for log messages.
   String _timestamp() => DateTime.now().toIso8601String();
 
@@ -27,6 +29,11 @@ class AppBlocObserver extends BlocObserver {
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
     print('📨 [${_timestamp()}] onEvent -- ${bloc.runtimeType}: $event');
+
+    /// 🔄 **Show loader only for specific events**
+    if (_shouldShowLoader(event)) {
+      globalLoaderCubit.showLoader();
+    }
   }
 
   /// 🔄 **Called when there is a state change in a BLoC/Cubit.**
@@ -42,6 +49,11 @@ class AppBlocObserver extends BlocObserver {
     super.onTransition(bloc, transition);
     print(
         '➡️ [${_timestamp()}] onTransition -- ${bloc.runtimeType}: $transition');
+
+    /// ⏹️ **Hide loader when the state update is completed**
+    if (_shouldHideLoader(transition.nextState)) {
+      globalLoaderCubit.hideLoader();
+    }
   }
 
   /// ❌ **Called when an error occurs in a BLoC/Cubit.**
@@ -49,6 +61,7 @@ class AppBlocObserver extends BlocObserver {
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     print(
         '❌ [${_timestamp()}] onError -- ${bloc.runtimeType}: $error\n$stackTrace');
+    globalLoaderCubit.hideLoader();
     super.onError(bloc, error, stackTrace);
   }
 
@@ -57,5 +70,22 @@ class AppBlocObserver extends BlocObserver {
   void onClose(BlocBase bloc) {
     print('🔴 [${_timestamp()}] onClose -- ${bloc.runtimeType}');
     super.onClose(bloc);
+  }
+
+  /// 🔍 **Determines if an event requires showing the loader.**
+  bool _shouldShowLoader(Object? event) {
+    final List<String> loaderEvents = [
+      "FetchTodos",
+      "LoadSettings",
+      "LoadData",
+      "SyncWithServer"
+    ];
+    return event != null &&
+        loaderEvents.any((e) => event.toString().contains(e));
+  }
+
+  /// 🔍 **Determines if the next state allows hiding the loader.**
+  bool _shouldHideLoader(Object nextState) {
+    return !nextState.toString().contains("Loading");
   }
 }

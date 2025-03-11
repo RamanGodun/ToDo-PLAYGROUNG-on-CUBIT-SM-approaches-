@@ -24,15 +24,16 @@ abstract class AppStrings {
   // ────────────────────────────────────────────────────────────────────
   // 🌗 **Theme Mode Messages**
   // ────────────────────────────────────────────────────────────────────
-  static const String lightModeEnabled = 'Light Mode Enabled';
-  static const String darkModeEnabled = 'Dark Mode Enabled';
+  static const String lightModeEnabled = 'now is  "Light Mode"';
+  static const String darkModeEnabled = 'now is  "Dark Mode"';
 
   // ────────────────────────────────────────────────────────────────────
   // 🔄 **State Propagation Messages**
   // ────────────────────────────────────────────────────────────────────
-  static const String statePropagationLSS = 'State Propagation: Listener-Based';
+  static const String statePropagationLSS =
+      'State Propagation:             "Listener-Based"';
   static const String statePropagationSSS =
-      'State Propagation: Stream Subscription';
+      'State Propagation:              "Stream Subscription"';
 
   // ────────────────────────────────────────────────────────────────────
   // 🔍 **Search Bar**
