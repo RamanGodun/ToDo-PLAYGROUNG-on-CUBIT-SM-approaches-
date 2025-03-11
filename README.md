@@ -1,85 +1,89 @@
-# 📝 ToDo App - **Cubit Playground**  
+# 📝 ToDo App - **Cubit Playground**
 
-## 📌 Overview  
+## 📌 Overview
 
-The **ToDo App** is an **educational Flutter project** that explores two **state management approaches** using **Cubit** exclusively. The key focus of this app is to demonstrate how different **state propagation techniques** affect UI separation and architecture.
+The **ToDo App** is an **educational Flutter project** focused exclusively on **Cubit-based state management**. The goal of this app is to explore different **state propagation techniques** and demonstrate their impact on architecture and code clarity.
 
-The project showcases the difference between:  
+This project compares two approaches:
 
-️✔ **Listener-based state propagation (ListenerStateShape)**  
-️✔ **Stream subscription-based state propagation (StreamSubscriptionStateShape)**  
+✔ **Listener-based state propagation (ListenerStateShape)**
+✔ **Stream subscription-based state propagation (StreamSubscriptionStateShape)**
 
-By comparing these two approaches, the app highlights why moving UI-related logic out of the presentation layer and into the state layer is a **cleaner and more maintainable** solution.
-
----
-
-## 🎯 Goals  
-
-- ✅ **Illustrate state propagation techniques** using Cubit.  
-- ✅ **Compare UI-driven state updates** (Listener) vs. **State-driven updates** (Stream Subscription).  
-- ✅ **Apply the Single Responsibility Principle (SRP)** to maintain clean separation between UI and business logic.  
-- ✅ **Showcase a scalable architecture** that makes state transitions explicit.  
+By analyzing these techniques, the app illustrates how shifting UI-related logic to the state layer ensures **cleaner and more maintainable** code.
 
 ---
 
-## 🏧 Architecture & Structure  
+## 🎯 Goals
 
-### 🌐 **Core**  
-
-- `core/config/` – **Global settings** (`AppConfig`, constants, themes, styles).  
-- `core/models/` – **Data models** for ToDos & filtering.  
-- `core/utils/` – **Helper functions, debounce, dialogs**.  
-- `core/factories/` – **Factory pattern** for state management switching.  
-
-### 🧬 **Features**  
-
-- **Header:** Displays active ToDo count.  
-- **Search & Filtering:** Enables real-time filtering.  
-- **ToDo List:** CRUD operations.  
-- **Filtered List:** Dynamically updates based on active filters.  
-
-### 🎨 **Presentation Layer**  
-
-- **`presentation/pages/`** – Screens & page navigation.  
-- **`presentation/widgets/`** – Custom reusable UI components.  
+- ✅ **Showcase Cubit-based state propagation techniques**.
+- ✅ **Compare UI-driven state updates (Listener) vs. State-driven updates (Stream Subscription)**.
+- ✅ **Apply the Single Responsibility Principle (SRP)** to maintain strict separation between UI and business logic.
+- ✅ **Demonstrate a scalable, maintainable architecture** with explicit state transitions.
 
 ---
 
-## 🚀 Features & Highlights  
+## 🏗️ Architecture & Structure
 
-️✔ **Dynamic State Shape Switching** – Toggle between **Listener-based state** and **Stream Subscription state** in `AppConfig`.  
-️✔ **Minimal UI rebuilds** – Uses `context.select` to optimize performance.  
-️✔ **Strict separation of concerns** – UI stays **pure**, while business logic is handled **entirely in Cubits**.  
-️✔ **Factory Pattern** – Enables seamless switching between `ListenerStateShape` & `StreamSubscriptionStateShape`.  
-️✔ **SRP in Action** – Avoids business logic leakage into UI components.  
+The app follows a **Domain-UI structure**, eliminating unnecessary complexity while keeping logic and UI separate.
+
+### 🌐 **Domain Layer**
+
+- `domain/state/` – **State management cubits** (e.g., `AppSettingsCubit`, `TodoListCubit`).
+- `domain/models/` – **Core data models** (`Todo`, `Filter`).
+- `domain/config/` – **Global app settings and constants** (`AppConfig`, `AppStrings`).
+- `domain/utils/` – **Helper functions, debounce logic, and dialogs**.
+
+### 🎨 **UI Layer**
+
+- `ui/pages/` – **Screens & navigation**.
+- `ui/widgets/` – **Reusable UI components**.
+- `ui/theme/` – **App-wide styling & theming**.
+
+Each feature is represented by its corresponding **Cubit** inside the `domain/state/` directory, ensuring a modular and clean architecture.
 
 ---
 
-## 📌 Tech Stack  
+## 🚀 Features & Highlights
 
-- **Flutter** (Material Design 3)  
-- **Dart**  
-- **flutter_bloc** (Cubit)  
-- **Factory Pattern** for state management  
-- **Clean Architecture & SOLID Principles**  
+✔ **Dynamic State Shape Switching** – Toggle between **ListenerStateShape** and **StreamSubscriptionStateShape** in real-time.
+✔ **Optimized UI performance** – Uses `context.select` to minimize rebuilds.
+✔ **Strict separation of concerns** – UI remains **pure**, and state logic is encapsulated in Cubits.
+✔ **Hydrated State Persistence** – Ensures state is preserved across app restarts.
+✔ **Dependency Injection with GetIt** – For easy service and state management.
+✔ **SRP Compliance** – Business logic is fully decoupled from UI.
 
 ---
 
-## 🛠️ Getting Started  
+## 📌 Tech Stack
 
-### 1⃣ Clone the Repository  
+- **Flutter** (Material Design 3)
+- **Dart**
+- **flutter_bloc** (Cubit)
+- **hydrated_bloc** (State persistence)
+- **rxdart** (Reactive programming)
+- **get_it** (Dependency injection)
+- **equatable** (Value equality for states)
+- **google_fonts** (Custom fonts)
+- **path_provider** (File system storage)
+- **uuid** (Unique ID generation)
+
+---
+
+## 🛠️ Getting Started
+
+### 1⃣ Clone the Repository
 
 ```bash
 git clone https://github.com/RamanGodun/TODO-APP-CUBIT.git
 ```
 
-### 2⃣ Install Dependencies  
+### 2⃣ Install Dependencies
 
 ```bash
 flutter pub get
 ```
 
-### 3⃣ Run the App  
+### 3⃣ Run the App
 
 ```bash
 flutter run
@@ -87,28 +91,27 @@ flutter run
 
 ---
 
-## 📚 Learning Outcomes  
+## 📚 Learning Outcomes
 
-- ✅ Understand **Cubit-based state management** with **UI propagation techniques**.  
-- ✅ Learn how to **reduce unnecessary UI rebuilds**.  
-- ✅ Explore **state management switching** dynamically.  
-- ✅ Follow **best coding practices & clean architecture** in Flutter.  
-
----
-
-## 🔍 License  
-
-This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.  
+- ✅ Understand **Cubit-based state management** and **UI propagation techniques**.
+- ✅ Learn how to **minimize unnecessary UI rebuilds**.
+- ✅ Explore **state-driven updates vs. UI-driven updates**.
+- ✅ Follow **best practices for clean architecture in Flutter**.
 
 ---
 
-## 🚀 Future Enhancements  
+## 🔍 License
 
-📌 **Persistent Data Storage** – Add **Hive/Isar** for local database.  
-📌 **Loading State Handling** – Implement **circular progress indicators**.  
-📌 **Error Handling** – Introduce **custom error dialogs**.  
-📌 **Pagination** – Traditional **or infinite scroll**.  
-📌 **Navigation Refactor** – Migrate to **onGenerateRoutes** if extra pages are added.  
+This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
 
 ---
 
+## 🚀 Future Enhancements
+
+📌 **Persistent Data Storage** – Consider integrating **Hive/Isar** for local database support.
+📌 **Advanced Loading Indicators** – Implement better state-based loaders.
+📌 **Error Handling Improvements** – Introduce robust error dialogs.
+📌 **Pagination Support** – Optimize large ToDo lists with infinite scrolling.
+📌 **Navigation Refactor** – Migrate to **onGenerateRoutes** for scalability.
+
+---
