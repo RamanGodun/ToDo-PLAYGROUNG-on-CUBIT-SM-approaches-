@@ -5,7 +5,6 @@ enum AppStateShapeManagement {
   withStreamSubscription // 🔵 Use "StreamSubscription" app's state shape
 }
 
-
 enum Filter {
   all,
   active,
