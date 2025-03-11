@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
-  runApp(const MainApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorageDirectory.web
+        : HydratedStorageDirectory((await getTemporaryDirectory()).path),
+  );
+  // HydratedBloc.storage.clear(); // ! only in test mode (delete all data)
+
+  runApp(const StateManagementProvider());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class StateManagementProvider extends StatelessWidget {
+  const StateManagementProvider({super.key});
 
   @override
   Widget build(BuildContext context) {
