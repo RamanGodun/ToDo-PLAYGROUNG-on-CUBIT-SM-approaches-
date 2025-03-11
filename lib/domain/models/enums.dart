@@ -1,12 +1,22 @@
 /// 🌐 **[AppStateShapeManagement]** - Defines the state management approach used across the app.
-/// Provides an easy toggle between **BLoC** and **Cubit** state management.
+library;
+
+/// This enum allows toggling between different **state propagation strategies**:
+/// - 🟢 **`withListener`** → Uses `BlocListener` for state updates.
+/// - 🔵 **`withStreamSubscription`** → Uses `StreamSubscription` for state updates.
 enum AppStateShapeManagement {
-  withListener, // 🟢 Use "Listener" app's state shape
-  withStreamSubscription // 🔵 Use "StreamSubscription" app's state shape
+  withListener, // 🟢 Listener-based state shape
+  withStreamSubscription // 🔵 StreamSubscription-based state shape
 }
 
+/// 🔍 **[Filter]** - Defines available filters for the ToDo list.
+
+/// Used to filter tasks based on their completion status:
+/// - 📌 **`all`** → Show all tasks.
+/// - ✅ **`active`** → Show only unfinished tasks.
+/// - 🎯 **`completed`** → Show only completed tasks.
 enum Filter {
-  all,
-  active,
-  completed,
+  all, // 📌 All tasks
+  active, // ✅ Active (unfinished) tasks
+  completed, // 🎯 Completed tasks
 }

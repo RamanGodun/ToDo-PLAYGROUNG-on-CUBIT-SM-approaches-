@@ -1,3 +1,8 @@
+/// 📤 **State Management Exports**
+/// Centralized exports for Cubits used in the application.
+/// Keeps imports clean and maintains a structured architecture.
+library;
+
 export '../../domain/state/features/header/listener_state_shape/active_todo_count_cubit_listener_ss.dart';
 export '../../domain/state/features/header/stream_subscription_state_shape/active_todo_count_cubit.dart';
 export '../../domain/state/features/todo_filter/todo_filter_cubit.dart';

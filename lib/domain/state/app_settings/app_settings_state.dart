@@ -1,22 +1,20 @@
 part of 'app_settings_cubit.dart';
 
-/// 📦 [AppSettingsState] - зберігає налаштування додатку:
-/// - **Тип стейт-шейпу (Listener / Stream Subscription)**
-/// - **Тема (світла/темна)**
-class AppSettingsState extends Equatable {
-  /// 🔁 Який **стейт-шейп** використовується в додатку
-  final AppStateShapeManagement stateShapeManagement;
+/// 🎛️ **[AppSettingsState]** - Represents the application settings state, includes:
+/// - **🔄 State Shape Mode:** `Listener` vs. `StreamSubscription`.
+/// - **🌗 Theme Mode:** Light / Dark.
 
-  /// 🎨 Чи **увімкнена темна тема**
+/// Used in **[AppSettingsCubit]** for managing UI preferences.
+class AppSettingsState extends Equatable {
+  final AppStateShapeManagement stateShapeManagement;
   final bool isDarkTheme;
 
-  /// 🆕 Конструктор стану
   const AppSettingsState({
     required this.stateShapeManagement,
     required this.isDarkTheme,
   });
 
-  /// 🔄 Повертає дефолтний стан
+  /// 🔄 **Returns the initial default state.**
   factory AppSettingsState.initial() {
     return const AppSettingsState(
       stateShapeManagement: AppStateShapeManagement.withListener,
@@ -24,7 +22,7 @@ class AppSettingsState extends Equatable {
     );
   }
 
-  /// 🔄 Створює копію стану з оновленими параметрами.
+  /// 📝 **Creates a copy of the state with updated properties.**
   AppSettingsState copyWith({
     AppStateShapeManagement? stateShapeManagement,
     bool? isDarkTheme,
@@ -35,11 +33,16 @@ class AppSettingsState extends Equatable {
     );
   }
 
-  /// ✅ Перевірка рівності об'єктів
+  /// 🔍 **Equality check using `Equatable` for efficient state comparisons.**
   @override
   List<Object> get props => [stateShapeManagement, isDarkTheme];
 
-  /// 🛠️ Геттер для перевірки, чи використовується **Listener State Shape**
+  /// ℹ️ **Readable Debug Output for Logging**
+  @override
+  String toString() =>
+      'AppSettingsState(stateShape: $stateShapeManagement, isDarkTheme: $isDarkTheme)';
+
+  /// ✅ **Helper Getter** - Checks if `Listener` state shape is active.
   bool get isUsingListenerStateShapeForAppFeatures =>
       stateShapeManagement == AppStateShapeManagement.withListener;
 }

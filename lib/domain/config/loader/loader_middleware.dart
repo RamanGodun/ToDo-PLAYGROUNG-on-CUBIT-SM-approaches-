@@ -1,13 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'loader_cubit.dart';
 
-/// 🌐 [GlobalLoaderMiddleware] - Middleware responsible for automatically managing the global loader state.
-/// This observer listens to all bloc events and manages the loader accordingly.
+/// 🌐 **[GlobalLoaderMiddleware]** - Middleware responsible for managing the global loader state.
+
+/// This observer listens to all **BLoC** events and automatically toggles the loader when needed.
 class GlobalLoaderMiddleware extends BlocObserver {
   final GlobalLoaderCubit globalLoaderCubit;
 
+  /// 🆕 **Initializes the middleware with a reference to [GlobalLoaderCubit].**
   GlobalLoaderMiddleware({required this.globalLoaderCubit});
 
+  /// 📨 **Listens for events and activates the loader for async operations.**
   @override
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
@@ -18,6 +21,7 @@ class GlobalLoaderMiddleware extends BlocObserver {
     }
   }
 
+  /// 🔄 **Listens for state transitions and hides the loader when processing is complete.**
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
@@ -28,13 +32,13 @@ class GlobalLoaderMiddleware extends BlocObserver {
     }
   }
 
-  /// 🔍 Helper method to determine if an event is an async operation.
+  /// 🔍 **Determines if an event represents an asynchronous operation.**
   bool _isAsyncOperation(Object? event) {
     return event.toString().contains("Loading") ||
         event.toString().contains("Fetch");
   }
 
-  /// 🔍 Helper method to determine if the state is a completed state.
+  /// 🔍 **Checks if the next state indicates the operation is complete.**
   bool _isStateComplete(Object nextState) {
     return !nextState.toString().contains("Loading");
   }

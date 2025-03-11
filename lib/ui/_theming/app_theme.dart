@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import '../../domain/app_constants/app_constants.dart';
 import 'text_styles.dart';
 
-/// 🎨 `AppThemes` визначає теми додатку
+/// 🎨 **[AppThemes]** - Defines light and dark themes for the application.
 abstract class AppThemes {
-  /// 🌓 Темна тема
+  /// 🌙 **Dark Theme**
   static final ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
     primaryColor: AppConstants.darkPrimaryColor,
     scaffoldBackgroundColor: AppConstants.darkScaffoldBackgroundColor,
+
+    /// 📌 **App Bar Theme**
     appBarTheme: const AppBarTheme(
-      backgroundColor: Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: Colors.black,
       centerTitle: true,
       foregroundColor: AppConstants.darkForegroundColor,
       elevation: 0,
@@ -19,6 +21,8 @@ abstract class AppThemes {
         color: AppConstants.darkForegroundColor, // 🌙 Dark mode icons
       ),
     ),
+
+    /// 🎨 **Color Scheme**
     colorScheme: const ColorScheme.dark(
       primary: AppConstants.darkPrimaryColor,
       secondary: AppConstants.secondaryColor4DarkTheme,
@@ -31,7 +35,11 @@ abstract class AppThemes {
       onBackground: Colors.white,
       onError: Colors.white,
     ),
+
+    /// 🖋 **Text Theme**
     textTheme: TextStyles4ThisAppThemes.kTextThemeData(true),
+
+    /// 🔘 **Elevated Button Theme**
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppConstants.darkPrimaryColor,
@@ -40,19 +48,20 @@ abstract class AppThemes {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        // textStyle: TextStyles4ThisAppThemes.kTextThemeData(true).displaySmall,
         elevation: 0,
         shadowColor: Colors.black.withOpacity(0.2),
       ),
     ),
   );
 
-  /// 🌞 Світла тема
+  /// ☀️ **Light Theme**
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
     primaryColor: AppConstants.lightPrimaryColor,
     scaffoldBackgroundColor: AppConstants.lightScaffoldBackgroundColor,
+
+    /// 📌 **App Bar Theme**
     appBarTheme: const AppBarTheme(
       backgroundColor: AppConstants.lightAppBarBackgroundColor,
       centerTitle: true,
@@ -62,6 +71,8 @@ abstract class AppThemes {
         color: AppConstants.lightForegroundColor, // ☀️ Light mode icons
       ),
     ),
+
+    /// 🎨 **Color Scheme**
     colorScheme: const ColorScheme.light(
       primary: AppConstants.lightPrimaryColor,
       secondary: AppConstants.secondaryColor4LightTheme,
@@ -74,7 +85,11 @@ abstract class AppThemes {
       onBackground: Colors.black,
       onError: Colors.white,
     ),
+
+    /// 🖋 **Text Theme**
     textTheme: TextStyles4ThisAppThemes.kTextThemeData(false),
+
+    /// 🔘 **Elevated Button Theme**
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppConstants.lightPrimaryColor,
@@ -83,7 +98,6 @@ abstract class AppThemes {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        // textStyle: TextStyles4ThisAppThemes.kTextThemeData(false).displaySmall,
         elevation: 0,
         shadowColor: Colors.grey.withOpacity(0.2),
       ),

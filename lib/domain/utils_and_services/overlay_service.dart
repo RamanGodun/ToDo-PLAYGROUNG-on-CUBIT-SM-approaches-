@@ -7,18 +7,20 @@ import '../app_constants/app_constants.dart';
 import '../config/loader/loader_cubit.dart';
 import 'helpers.dart';
 
-/// 🌟 [OverlayNotificationService] – Displays animated overlay messages in macOS/iOS style.
+/// 🌟 **[OverlayNotificationService]** – Displays animated overlay messages in macOS/iOS style.
 class OverlayNotificationService {
   static OverlayEntry? _overlayEntry;
 
-  /// 📌 Show Overlay Notification
+  /// 📌 **Show Overlay Notification**
+  /// Displays an animated overlay message with an [icon] and [message].
+  /// If a global loader is active, the overlay is not shown.
   static void showOverlay(BuildContext context,
       {required String message, required IconData icon}) {
     _removeOverlay();
 
     final overlay = Overlay.of(context, rootOverlay: true);
 
-    // ❌ Якщо активний лоадер, не показувати оверлей
+    // ❌ Do not show overlay if global loader is active
     final isLoading = context.read<GlobalLoaderCubit>().state;
     if (isLoading) return;
 
@@ -31,14 +33,15 @@ class OverlayNotificationService {
     Future.delayed(const Duration(seconds: 2), () => _removeOverlay());
   }
 
-  /// 🛑 Remove Overlay
+  /// 🛑 **Remove Overlay**
+  /// Closes and removes the overlay from the screen.
   static void _removeOverlay() {
     _overlayEntry?.remove();
     _overlayEntry = null;
   }
 }
 
-/// 🎭 A beautiful animated overlay widget.
+/// 🎭 **_AnimatedOverlayWidget** - Beautiful animated notification widget.
 class _AnimatedOverlayWidget extends HookWidget {
   final String message;
   final IconData icon;
@@ -60,7 +63,7 @@ class _AnimatedOverlayWidget extends HookWidget {
           .chain(CurveTween(curve: Curves.elasticOut)),
     );
 
-    // 🔹 Get theme-aware colors dynamically
+    // 🎨 **Get theme-aware colors dynamically**
     final colorScheme = Helpers.getColorScheme(context);
     final isDarkMode = colorScheme.brightness == Brightness.dark;
     final backgroundColor = isDarkMode
@@ -77,9 +80,10 @@ class _AnimatedOverlayWidget extends HookWidget {
     return Stack(
       children: [
         Positioned(
-          top: MediaQuery.of(context).padding.top + 40,
-          left: MediaQuery.of(context).size.width * 0.05,
-          right: MediaQuery.of(context).size.width * 0.05,
+          // 🔽 Centers the overlay message on the screen
+          top: MediaQuery.of(context).size.height * 0.4,
+          left: MediaQuery.of(context).size.width * 0.1,
+          right: MediaQuery.of(context).size.width * 0.1,
           child: FadeTransition(
             opacity: opacity,
             child: ScaleTransition(

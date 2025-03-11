@@ -6,13 +6,15 @@ import '../../domain/state/app_settings/app_settings_cubit.dart';
 import '../../domain/utils_and_services/cubits_export.dart';
 import 'todo_item.dart';
 
-/// 📦 [ShowTodosWidget] dynamically selects the appropriate Todo list widget
-/// based on the current **State Shape** (ListenerStateShape / StreamSubscriptionStateShape).
+/// 📌 [ShowTodosWidget] - A dynamic widget that displays ToDo items.
+/// Depending on the selected **State Shape** (Listener-Based / Stream Subscription-Based),
+/// it chooses the appropriate method to handle state updates.
 class ShowTodosWidget extends StatelessWidget {
   const ShowTodosWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    /// 🔄 Retrieves the current **State Shape Mode** from [AppSettingsCubit].
     final isListenerBasedStateShape = context.select<AppSettingsCubit, bool>(
       (cubit) => cubit.state.isUsingListenerStateShapeForAppFeatures,
     );
@@ -23,7 +25,8 @@ class ShowTodosWidget extends StatelessWidget {
   }
 }
 
-// ! 🔵 **Stream Subscription-Based State Shape**
+/// ! 🔵 [ShowTodosForStreamSubscriptionStateShape] - Displays ToDos using **Stream Subscription-Based State Shape**.
+/// It listens for updates from **FilteredTodosCubitWithStreamSubscriptionStateShape**.
 class ShowTodosForStreamSubscriptionStateShape extends StatelessWidget {
   const ShowTodosForStreamSubscriptionStateShape({super.key});
 
@@ -38,7 +41,8 @@ class ShowTodosForStreamSubscriptionStateShape extends StatelessWidget {
   }
 }
 
-// ! 🟠 **Listener-Based State Shape**
+/// ! 🟠 [ShowTodosWithListenerStateShape] - Displays ToDos using **Listener-Based State Shape**.
+/// It uses multiple **BlocListener** instances to update the filtered ToDos list.
 class ShowTodosWithListenerStateShape extends StatelessWidget {
   const ShowTodosWithListenerStateShape({super.key});
 
@@ -51,6 +55,7 @@ class ShowTodosWithListenerStateShape extends StatelessWidget {
 
     return MultiBlocListener(
       listeners: [
+        /// 🎯 Listens for changes in the ToDo list and updates the filtered list.
         BlocListener<TodoListCubit, TodoListStateOnCubit>(
           listener: (context, state) {
             context
@@ -62,6 +67,8 @@ class ShowTodosWithListenerStateShape extends StatelessWidget {
                 );
           },
         ),
+
+        /// 🔍 Listens for filter changes and updates the filtered ToDos list.
         BlocListener<TodoFilterCubit, TodoFilterStateOnCubit>(
           listener: (context, state) {
             context
@@ -73,6 +80,8 @@ class ShowTodosWithListenerStateShape extends StatelessWidget {
                 );
           },
         ),
+
+        /// 🔎 Listens for search term changes and updates the filtered ToDos list.
         BlocListener<TodoSearchCubit, TodoSearchStateOnCubit>(
           listener: (context, state) {
             context
@@ -90,7 +99,7 @@ class ShowTodosWithListenerStateShape extends StatelessWidget {
   }
 }
 
-// ? 🔧 ** Method for list building **
+/// 🔧 [_buildTodoList] - Builds a list of **SlidableTodoItem** widgets.
 Widget _buildTodoList(BuildContext context, List<Todo> todos) {
   return ListView.separated(
     primary: false,
@@ -98,7 +107,9 @@ Widget _buildTodoList(BuildContext context, List<Todo> todos) {
     itemCount: todos.length,
     separatorBuilder: (BuildContext context, int index) {
       return const Divider(
-          color: AppConstants.darkSurfaceColor, thickness: 0.5);
+        color: AppConstants.darkSurfaceColor,
+        thickness: 0.5,
+      );
     },
     itemBuilder: (BuildContext context, int index) {
       return SlidableTodoItem(todo: todos[index]);

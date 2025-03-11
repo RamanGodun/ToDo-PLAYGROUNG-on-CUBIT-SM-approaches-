@@ -7,19 +7,22 @@ import '../../domain/state/app_settings/app_settings_cubit.dart';
 import '../../domain/utils_and_services/cubits_export.dart';
 import 'text_widget.dart';
 
-/// 🏷️ Common reusable widget for Todo Header
+/// 📌 [TodoHeader] - A common reusable header widget for the ToDo list.
+/// Dynamically switches between **Listener-Based** and **Stream Subscription-Based** state shapes.
 class TodoHeader extends StatelessWidget {
   const TodoHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
+    /// 🔄 Retrieves the current **State Shape Mode** from [AppSettingsCubit].
     final isListenerStateShape = context.select<AppSettingsCubit, bool>(
       (cubit) => cubit.state.isUsingListenerStateShapeForAppFeatures,
     );
 
+    /// 🏷️ Retrieves the correct title based on the selected **State Shape Mode**.
     final appBarTitle = isListenerStateShape
         ? AppStrings.titleForListenerBasedStateShape
-        : AppStrings.titleForStreamSubscriptionBasedStateShape;
+        : AppStrings.titleForStreamSubscriptionStateShape;
 
     return isListenerStateShape
         ? TodoHeaderForListenerStateShape(appBarTitle: appBarTitle)
@@ -27,7 +30,7 @@ class TodoHeader extends StatelessWidget {
   }
 }
 
-/// ! 🎯 Header for Stream Subscription State Shape
+/// ! 🔵 **Header for Stream Subscription-Based State Shape**
 class TodoHeaderForStreamSubscriptionStateShape extends StatelessWidget {
   final String appBarTitle;
 
@@ -38,6 +41,7 @@ class TodoHeaderForStreamSubscriptionStateShape extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// 🎯 Retrieves the **active ToDo count** from the Stream Subscription-based Cubit.
     final activeTodoCount = context
         .watch<ActiveTodoCountCubitWithUsingStreamSubscriptionStateShape>()
         .state
@@ -50,7 +54,7 @@ class TodoHeaderForStreamSubscriptionStateShape extends StatelessWidget {
   }
 }
 
-/// ! 🎯 Header for Listener State Shape
+/// ! 🟠 **Header for Listener-Based State Shape**
 class TodoHeaderForListenerStateShape extends StatelessWidget {
   final String appBarTitle;
 
@@ -62,6 +66,7 @@ class TodoHeaderForListenerStateShape extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<TodoListCubit, TodoListStateOnCubit>(
+      /// 🔄 Listens for updates in the ToDo list and recalculates the **active ToDo count**.
       listener: (context, state) {
         context
             .read<ActiveTodoCountCubitWithUsingListenerStateShape>()
@@ -80,7 +85,7 @@ class TodoHeaderForListenerStateShape extends StatelessWidget {
   }
 }
 
-/// 🎨 **Reusable UI component for the Todo Header**
+/// 🎨 **Reusable UI component for the Todo Header**.
 class TodoHeaderContent extends StatelessWidget {
   final int activeTodoCount;
   final String appBarTitle;

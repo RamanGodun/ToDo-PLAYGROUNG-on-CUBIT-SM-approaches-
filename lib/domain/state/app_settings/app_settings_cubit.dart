@@ -5,13 +5,16 @@ import '../../models/enums.dart';
 
 part 'app_settings_state.dart';
 
-/// 📦 [AppSettingsCubit] - керує налаштуваннями теми та типу стейт-шейпу.
-/// Зберігає дані через HydratedCubit, щоб налаштування не губилися після рестарту.
+/// ⚙️ **[AppSettingsCubit]** - Manages application settings, includes:
+/// - 🎨 **Theme Mode:** Light / Dark mode.
+/// - 🔄 **State Shape Mode:** `Listener` vs. `StreamSubscription`.
+
+/// **State Persistence:** Uses `HydratedCubit` to restore settings after app restart.
 class AppSettingsCubit extends HydratedCubit<AppSettingsState> {
-  /// 🆕 Ініціалізує кубіт зі збереженим станом або дефолтним.
+  /// 🆕 **Initializes with persisted state or default values.**
   AppSettingsCubit() : super(AppSettingsState.initial());
 
-  /// 🔁 Перемикає між **ListenerStateShape** і **StreamSubscriptionStateShape**.
+  /// 🔄 **Toggles between "Listener" and "StreamSubscription" state shapes.**
   void toggleStateShape() {
     final newStateShape = state.isUsingListenerStateShapeForAppFeatures
         ? AppStateShapeManagement.withStreamSubscription
@@ -20,12 +23,12 @@ class AppSettingsCubit extends HydratedCubit<AppSettingsState> {
     emit(state.copyWith(stateShapeManagement: newStateShape));
   }
 
-  /// 🎨 Перемикає тему (світла/темна).
+  /// 🎨 **Toggles theme mode (Light / Dark).**
   void toggleTheme(bool isDarkMode) {
     emit(state.copyWith(isDarkTheme: isDarkMode));
   }
 
-  /// 💾 Зберігає стан у JSON для відновлення після рестарту.
+  /// 💾 **Serializes state to JSON for persistent storage.**
   @override
   Map<String, dynamic>? toJson(AppSettingsState state) {
     return {
@@ -35,7 +38,7 @@ class AppSettingsCubit extends HydratedCubit<AppSettingsState> {
     };
   }
 
-  /// 💾 Відновлює стан із JSON після рестарту додатку.
+  /// 💾 **Restores state from JSON after app restart.**
   @override
   AppSettingsState? fromJson(Map<String, dynamic> json) {
     return AppSettingsState(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/app_constants/app_constants.dart';
 
-/// 📄 [TextWidget] is a customizable widget for displaying styled text with pre-defined text types.
+/// 📄 **[TextWidget]** - A customizable widget for displaying styled text with predefined text types.
 class TextWidget extends StatelessWidget {
   final String? text;
   final TextType? textType;
@@ -29,7 +29,7 @@ class TextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    /// 🧠 [buildText] constructs the [Text] widget with applied styles.
+    /// 🛠 **Helper method to build the text with applied styles.**
     Text buildText(TextStyle? baseStyle) {
       return Text(
         text ?? 'No name',
@@ -44,7 +44,7 @@ class TextWidget extends StatelessWidget {
       );
     }
 
-    /// 🎯 Choose the appropriate style based on [TextType].
+    /// 🎯 **Determines the appropriate text style based on [TextType].**
     switch (textType) {
       case TextType.headline:
         return buildText(textTheme.headlineMedium);
@@ -68,7 +68,7 @@ class TextWidget extends StatelessWidget {
   }
 }
 
-/// 📑 [TextType] defines the available styles for the [TextWidget].
+/// 📑 **[TextType]** - Defines available styles for the [TextWidget].
 enum TextType {
   headline,
   smallHeadline,
