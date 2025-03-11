@@ -5,19 +5,19 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'domain/app_constants/app_strings.dart';
+import 'domain/config/observer/app_bloc_observer.dart';
 import 'domain/state/app_settings/app_settings_cubit.dart';
-import 'domain/state/global_loader/loader_cubit.dart';
+import 'domain/config/loader/loader_cubit.dart';
 
-import 'domain/state/global_loader/loader_middleware.dart';
 import 'domain/utils_and_services/cubits_export.dart';
 import 'domain/utils_and_services/show_dialog.dart';
 import 'ui/pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Bloc.observer = AppBlocObserver();
-  Bloc.observer =
-      GlobalLoaderMiddleware(globalLoaderCubit: GlobalLoaderCubit());
+  Bloc.observer = AppBlocObserver();
+  // Bloc.observer =
+  // GlobalLoaderMiddleware(globalLoaderCubit: GlobalLoaderCubit());
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
         ? HydratedStorageDirectory.web

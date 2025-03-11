@@ -1,49 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app_cubit_2ss_playground/domain/app_constants/app_constants.dart';
 
+import '../../domain/app_constants/app_strings.dart';
 import '../../domain/state/app_settings/app_settings_cubit.dart';
 import '../../domain/utils_and_services/cubits_export.dart';
 import 'text_widget.dart';
 
-/// Common reusable widget for Todo Header
+/// 🏷️ Common reusable widget for Todo Header
 class TodoHeader extends StatelessWidget {
   const TodoHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // 🔄 Retrieve the current state shape mode
     final isListenerStateShape = context.select<AppSettingsCubit, bool>(
       (cubit) => cubit.state.isUsingListenerStateShapeForAppFeatures,
     );
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const TextWidget('TODO', TextType.smallHeadline),
-        isListenerStateShape
-            ? const TodoHeaderForListenerStateShape()
-            : const TodoHeaderForStreamSubscriptionStateShape(),
-      ],
-    );
+    final appBarTitle = isListenerStateShape
+        ? AppStrings.titleForListenerBasedStateShape
+        : AppStrings.titleForStreamSubscriptionBasedStateShape;
+
+    return isListenerStateShape
+        ? TodoHeaderForListenerStateShape(appBarTitle: appBarTitle)
+        : TodoHeaderForStreamSubscriptionStateShape(appBarTitle: appBarTitle);
   }
 }
 
-// ! NEXT for stream subscription state-shape
+/// ! 🎯 Header for Stream Subscription State Shape
 class TodoHeaderForStreamSubscriptionStateShape extends StatelessWidget {
-  const TodoHeaderForStreamSubscriptionStateShape({super.key});
+  final String appBarTitle;
+
+  const TodoHeaderForStreamSubscriptionStateShape({
+    super.key,
+    required this.appBarTitle,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      '${context.watch<ActiveTodoCountCubitWithUsingStreamSubscriptionStateShape>().state.activeTodoCount} items left',
-      style: const TextStyle(fontSize: 20.0, color: Colors.redAccent),
+    final activeTodoCount = context
+        .watch<ActiveTodoCountCubitWithUsingStreamSubscriptionStateShape>()
+        .state
+        .activeTodoCount;
+
+    return TodoHeaderContent(
+      activeTodoCount: activeTodoCount,
+      appBarTitle: appBarTitle,
     );
   }
 }
 
-// !Next is with Listener state shape
+/// ! 🎯 Header for Listener State Shape
 class TodoHeaderForListenerStateShape extends StatelessWidget {
-  const TodoHeaderForListenerStateShape({super.key});
+  final String appBarTitle;
+
+  const TodoHeaderForListenerStateShape({
+    super.key,
+    required this.appBarTitle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +70,38 @@ class TodoHeaderForListenerStateShape extends StatelessWidget {
       child: BlocBuilder<ActiveTodoCountCubitWithUsingListenerStateShape,
           ActiveTodoCountStateOnCubitWithUsingListenerStateShape>(
         builder: (context, state) {
-          return TextWidget(
-            '${state.activeTodoCount} items left',
-            TextType.titleMedium,
+          return TodoHeaderContent(
+            activeTodoCount: state.activeTodoCount,
+            appBarTitle: appBarTitle,
           );
         },
       ),
+    );
+  }
+}
+
+/// 🎨 **Reusable UI component for the Todo Header**
+class TodoHeaderContent extends StatelessWidget {
+  final int activeTodoCount;
+  final String appBarTitle;
+
+  const TodoHeaderContent({
+    super.key,
+    required this.activeTodoCount,
+    required this.appBarTitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        TextWidget(
+          '$activeTodoCount',
+          TextType.titleMedium,
+          color: AppConstants.errorColor,
+        ),
+        TextWidget(appBarTitle, TextType.titleMedium),
+      ],
     );
   }
 }

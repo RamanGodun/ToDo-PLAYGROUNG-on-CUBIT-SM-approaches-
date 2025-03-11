@@ -31,6 +31,9 @@ abstract class AppConstants {
   static const Color overlayDarkBorder = Color(0xFF474747);
   static const Color overlayLightBorder = Color(0xFFD6D6D6);
 
+  /// Filter colors
+  static const Color activeFilter = Colors.blue;
+
   /// 🛠️ Icons
   static const IconData sunIcon = Icons.sunny;
   static const IconData addIcon = Icons.add;
@@ -55,5 +58,5 @@ abstract class AppConstants {
       BorderRadius.all(Radius.circular(8));
 
   /// 📏 Максимальне відношення висоти діалогу до екрану (40%)
-  static const double dialogMaxHeightRatio = 0.4;
+  static const double dialogMaxHeightRatio = 0.1;
 }

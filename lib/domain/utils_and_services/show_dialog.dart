@@ -1,42 +1,13 @@
 import 'package:flutter/material.dart';
-
-import '../app_constants/app_constants.dart';
-import '../app_constants/app_strings.dart';
-import '../../ui/widgets/text_widget.dart';
-import 'helpers.dart';
+import '../../ui/widgets/create_todo_dialog.dart';
 
 /// 💬 [DialogService] provides reusable dialogs throughout the app.
 abstract class DialogService {
-  /// ⚠️ Shows an alert dialog with the provided [text].
-  static void showAlertDialog(BuildContext context, String text) {
+  /// 📝 Shows a dialog for creating a new ToDo.
+  static void showCreateTodoDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        content: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height *
-                AppConstants.dialogMaxHeightRatio,
-          ),
-          child: Center(
-            child: TextWidget(
-              text,
-              TextType.button,
-            ),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Center(
-              child: TextWidget(
-                AppStrings.okButton,
-                TextType.titleMedium,
-                color: Helpers.getColorScheme(context).primary,
-              ),
-            ),
-          ),
-        ],
-      ),
+      builder: (context) => const CreateTodoDialog(),
     );
   }
 

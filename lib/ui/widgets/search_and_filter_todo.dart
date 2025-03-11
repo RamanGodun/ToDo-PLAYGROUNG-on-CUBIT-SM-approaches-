@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app_cubit_2ss_playground/domain/utils_and_services/helpers.dart';
+import 'package:todo_app_cubit_2ss_playground/ui/widgets/text_widget.dart';
+import '../../domain/app_constants/app_constants.dart';
+import '../../domain/app_constants/app_strings.dart';
 import '../../domain/models/enums.dart';
 import '../../domain/utils_and_services/cubits_export.dart';
 import '../../domain/utils_and_services/debounce.dart';
@@ -10,11 +14,14 @@ class SearchAndFilterTodo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
+      shrinkWrap: true,
+      primary: true,
       children: [
         TextField(
+          style: Helpers.getTextTheme(context).titleMedium,
           decoration: const InputDecoration(
-            labelText: 'Search todos...',
+            labelText: AppStrings.searchTodosLabel,
             border: InputBorder.none,
             filled: true,
             prefixIcon: Icon(Icons.search),
@@ -29,38 +36,34 @@ class SearchAndFilterTodo extends StatelessWidget {
         ),
         const SizedBox(height: 10.0),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            filterButton(context, Filter.all),
-            filterButton(context, Filter.active),
-            filterButton(context, Filter.completed),
+            filterButton(context, Filter.all, AppStrings.filterAll),
+            filterButton(context, Filter.active, AppStrings.filterActive),
+            filterButton(context, Filter.completed, AppStrings.filterCompleted),
           ],
         ),
       ],
     );
   }
 
-  Widget filterButton(BuildContext context, Filter filter) {
+  Widget filterButton(BuildContext context, Filter filter, String label) {
     return TextButton(
       onPressed: () {
         context.read<TodoFilterCubit>().changeFilter(filter);
       },
-      child: Text(
-        filter == Filter.all
-            ? 'All'
-            : filter == Filter.active
-                ? 'Active'
-                : 'Completed',
-        style: TextStyle(
-          fontSize: 18.0,
-          color: textColor(context, filter),
-        ),
+      child: TextWidget(
+        label,
+        TextType.titleMedium,
+        color: textColor(context, filter),
       ),
     );
   }
 
   Color textColor(BuildContext context, Filter filter) {
     final currentFilter = context.watch<TodoFilterCubit>().state.filter;
-    return currentFilter == filter ? Colors.blue : Colors.grey;
+    return currentFilter == filter
+        ? AppConstants.activeFilter
+        : AppConstants.darkSurfaceColor;
   }
 }
