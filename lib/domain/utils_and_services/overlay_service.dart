@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:todo_app_cubit_2ss_playground/ui/widgets/text_widget.dart';
 import '../app_constants/app_constants.dart';
-import '../config/loader/loader_cubit.dart';
 import 'helpers.dart';
 
 /// 🌟 **[OverlayNotificationService]** – Displays animated overlay messages in macOS/iOS style.
@@ -19,10 +17,6 @@ class OverlayNotificationService {
     _removeOverlay();
 
     final overlay = Overlay.of(context, rootOverlay: true);
-
-    // ❌ Do not show overlay if global loader is active
-    final isLoading = context.read<GlobalLoaderCubit>().state;
-    if (isLoading) return;
 
     _overlayEntry = OverlayEntry(
       builder: (context) =>

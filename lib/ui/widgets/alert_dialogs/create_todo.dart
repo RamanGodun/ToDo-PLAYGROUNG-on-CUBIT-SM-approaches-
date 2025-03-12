@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:todo_app_cubit_2ss_playground/ui/widgets/text_widget.dart';
-import '../../domain/app_constants/app_constants.dart';
-import '../../domain/app_constants/app_strings.dart';
-import '../../domain/state/features/todos_list/todo_list_cubit.dart';
-import '../../domain/utils_and_services/helpers.dart';
+import '../../../domain/app_constants/app_constants.dart';
+import '../../../domain/app_constants/app_strings.dart';
+import '../../../domain/state/features/todos_list/todo_list_cubit.dart';
+import '../../../domain/utils_and_services/helpers.dart';
 
 /// 📜 [CreateTodoDialog] - A dialog for adding a new ToDo task.
 /// Uses [HookWidget] for state management with [useTextEditingController].
@@ -16,9 +16,14 @@ class CreateTodoDialog extends HookWidget {
   Widget build(BuildContext context) {
     // 📝 Controller for entering new ToDo description.
     final newTodoController = useTextEditingController();
+    final colorScheme = Helpers.getColorScheme(context);
 
     return AlertDialog(
-      title: const TextWidget(AppStrings.newTodoTitle, TextType.smallHeadline),
+      title: TextWidget(
+        AppStrings.newTodoTitle,
+        TextType.titleMedium,
+        color: colorScheme.onSurface,
+      ),
       content: ConstrainedBox(
         constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height *
@@ -49,10 +54,10 @@ class CreateTodoDialog extends HookWidget {
             /// ❌ Cancel button - Closes the dialog without adding a ToDo.
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const TextWidget(
+              child: TextWidget(
                 AppStrings.cancelButton,
                 TextType.titleSmall,
-                color: AppConstants.errorColor,
+                color: colorScheme.error,
               ),
             ),
 
@@ -65,10 +70,10 @@ class CreateTodoDialog extends HookWidget {
                   Navigator.of(context).pop();
                 }
               },
-              child: const TextWidget(
+              child: TextWidget(
                 AppStrings.addButton,
                 TextType.button,
-                color: AppConstants.darkPrimaryColor,
+                color: colorScheme.primary,
               ),
             ),
           ],

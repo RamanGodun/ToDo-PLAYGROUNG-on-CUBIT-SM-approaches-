@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../ui/widgets/create_todo.dart';
-import '../../ui/widgets/edit_todo.dart';
+import '../../ui/widgets/alert_dialogs/create_todo.dart';
+import '../../ui/widgets/alert_dialogs/edit_todo.dart';
 import '../models/todo_model.dart';
 
 /// 💬 **[DialogService]** - A service providing reusable dialogs throughout the app.

@@ -62,7 +62,7 @@ class AddTodoFAB extends StatelessWidget {
         mini: true,
         backgroundColor: Helpers.getColorScheme(context).primary,
         onPressed: () => DialogService.showCreateTodoDialog(context),
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: AppConstants.overlayDarkTextColor),
       ),
     );
   }

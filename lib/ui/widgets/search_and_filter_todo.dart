@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app_cubit_2ss_playground/domain/utils_and_services/helpers.dart';
 import 'package:todo_app_cubit_2ss_playground/ui/widgets/text_widget.dart';
-import '../../domain/app_constants/app_constants.dart';
 import '../../domain/app_constants/app_strings.dart';
 import '../../domain/models/enums.dart';
 import '../../domain/utils_and_services/cubits_export.dart';
@@ -18,6 +17,8 @@ class SearchAndFilterTodo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Helpers.getColorScheme(context);
+
     return ListView(
       shrinkWrap: true,
       primary: true,
@@ -45,36 +46,41 @@ class SearchAndFilterTodo extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _filterButton(context, Filter.all, AppStrings.filterAll),
-            _filterButton(context, Filter.active, AppStrings.filterActive),
             _filterButton(
-                context, Filter.completed, AppStrings.filterCompleted),
+                context, Filter.all, AppStrings.filterAll, colorScheme),
+            _filterButton(
+                context, Filter.active, AppStrings.filterActive, colorScheme),
+            _filterButton(context, Filter.completed, AppStrings.filterCompleted,
+                colorScheme),
           ],
         ),
 
         /// ➖ Divider for UI separation
-        Divider(color: Helpers.getColorScheme(context).onSurface, thickness: 3),
+        Divider(color: colorScheme.onSurface.withOpacity(0.5), thickness: 2.5),
       ],
     );
   }
 }
 
 /// 🔘 [_FilterButton] - Creates a reusable filter button.
-Widget _filterButton(BuildContext context, Filter filter, String label) {
+Widget _filterButton(BuildContext context, Filter filter, String label,
+    ColorScheme colorScheme) {
   return TextButton(
     onPressed: () => context.read<TodoFilterCubit>().changeFilter(filter),
     child: TextWidget(
       label,
       TextType.titleMedium,
-      color: _getTextColor(context, filter),
+      color: _getTextColor(context, filter, colorScheme),
+      fontWeight: FontWeight.w600,
     ),
   );
 }
 
 /// 🎨 [_getTextColor] - Returns the appropriate color for the filter button.
-Color _getTextColor(BuildContext context, Filter filter) {
+Color _getTextColor(
+    BuildContext context, Filter filter, ColorScheme colorScheme) {
   final currentFilter = context.watch<TodoFilterCubit>().state.filter;
   return currentFilter == filter
-      ? AppConstants.activeFilter
-      : AppConstants.darkSurfaceColor;
+      ? colorScheme.primary
+      : colorScheme.onSurface.withOpacity(0.5);
 }

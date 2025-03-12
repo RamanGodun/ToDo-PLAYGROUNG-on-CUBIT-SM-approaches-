@@ -107,8 +107,8 @@ Widget _buildTodoList(BuildContext context, List<Todo> todos) {
     itemCount: todos.length,
     separatorBuilder: (BuildContext context, int index) {
       return const Divider(
-        color: AppConstants.darkSurfaceColor,
-        thickness: 0.5,
+        color: AppConstants.secondaryColor4LightTheme,
+        thickness: 0.3,
       );
     },
     itemBuilder: (BuildContext context, int index) {

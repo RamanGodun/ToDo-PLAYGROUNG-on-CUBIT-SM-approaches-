@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -7,10 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'domain/app_constants/app_strings.dart';
 import 'domain/config/observer/app_bloc_observer.dart';
 import 'domain/state/app_settings/app_settings_cubit.dart';
-import 'domain/config/loader/loader_cubit.dart';
-
 import 'domain/utils_and_services/cubits_export.dart';
-import 'domain/utils_and_services/show_dialog.dart';
 import 'ui/pages/home_page.dart';
 
 /// 🚀 **[main] - Application entry point.**
@@ -21,38 +18,32 @@ import 'ui/pages/home_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  /// 🌐 **Global Loader Cubit** - Manages loading state across the app.
-  final globalLoaderCubit = GlobalLoaderCubit();
-  // 🛠️ **Set up a global BLoC observer**
-  Bloc.observer = AppBlocObserver(globalLoaderCubit: globalLoaderCubit);
+  // 🌐🛠️ **Set up a global BLoC observer**
+  Bloc.observer = AppBlocObserver();
 
   /// 💾 **Initialize Hydrated Storage** (State Persistence)
-  HydratedBloc.storage = await HydratedStorage.build(
+  final storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
         ? HydratedStorageDirectory.web
         : HydratedStorageDirectory(
             (await getApplicationDocumentsDirectory()).path),
   );
+  HydratedBloc.storage = storage;
 
   /// 🏁 **Launch the app**
-  runApp(StateManagementProvider(globalLoaderCubit: globalLoaderCubit));
+  runApp(const StateManagementProvider());
 }
 
 /// 📦 **[StateManagementProvider] - Provides all BLoC dependencies**
 /// - Registers **GlobalLoaderCubit, AppSettingsCubit, Todo Cubits**.
 /// - Manages **Listener-based & Stream Subscription-based** state shapes.
 class StateManagementProvider extends StatelessWidget {
-  final GlobalLoaderCubit globalLoaderCubit;
-
-  const StateManagementProvider({super.key, required this.globalLoaderCubit});
+  const StateManagementProvider({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        /// 🔄 **Global Loader Provider** (Used for async operations)
-        BlocProvider(create: (_) => globalLoaderCubit),
-
         /// 🎨 **App Settings Provider** (Manages Theme & State Shape)
         BlocProvider(create: (_) => AppSettingsCubit()),
 
@@ -83,26 +74,6 @@ class StateManagementProvider extends StatelessWidget {
                     todoSearchCubit: context.read<TodoSearchCubit>(),
                     todoListCubit: context.read<TodoListCubit>()))
       ],
-      child: GlobalLoaderProvider(globalLoaderCubit: globalLoaderCubit),
-    );
-  }
-}
-
-/// ⏳ **[GlobalLoaderProvider] - Wraps the app with global loading management**
-/// - Uses **BlocListener** to listen for global loading state changes.
-/// - Displays **Loading Dialog** when loading is active.
-class GlobalLoaderProvider extends StatelessWidget {
-  final GlobalLoaderCubit globalLoaderCubit;
-
-  const GlobalLoaderProvider({super.key, required this.globalLoaderCubit});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocListener<GlobalLoaderCubit, bool>(
-      bloc: globalLoaderCubit,
-      listener: (context, isLoading) => isLoading
-          ? DialogService.showLoadingDialog(context)
-          : DialogService.closeDialog(context),
       child: const AppView(),
     );
   }

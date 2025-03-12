@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app_cubit_2ss_playground/domain/app_constants/app_constants.dart';
 import 'package:todo_app_cubit_2ss_playground/domain/app_constants/app_strings.dart';
+import 'package:todo_app_cubit_2ss_playground/ui/widgets/text_widget.dart';
 import '../../domain/models/todo_model.dart';
 import '../../domain/utils_and_services/cubits_export.dart';
 import '../../domain/utils_and_services/helpers.dart';
@@ -16,6 +16,8 @@ class SlidableTodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Helpers.getColorScheme(context);
+
     return Slidable(
       key: ValueKey(todo.id),
 
@@ -25,8 +27,8 @@ class SlidableTodoItem extends StatelessWidget {
         children: [
           SlidableAction(
             onPressed: (_) => DialogService.editTodo(context, todo),
-            backgroundColor: AppConstants.darkPrimaryColor,
-            foregroundColor: AppConstants.darkForegroundColor,
+            backgroundColor: colorScheme.primary,
+            foregroundColor: colorScheme.onPrimary,
             label: AppStrings.editButton,
           ),
         ],
@@ -38,8 +40,8 @@ class SlidableTodoItem extends StatelessWidget {
         children: [
           SlidableAction(
             onPressed: (_) => context.read<TodoListCubit>().removeTodo(todo),
-            backgroundColor: AppConstants.errorColor,
-            foregroundColor: AppConstants.darkForegroundColor,
+            backgroundColor: colorScheme.error,
+            foregroundColor: colorScheme.onError,
             icon: Icons.delete,
             label: AppStrings.deleteButton,
           ),
@@ -60,18 +62,17 @@ class TodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = Helpers.getColorScheme(context).onSurface;
+    final textColor =
+        Helpers.getColorScheme(context).onSurface.withOpacity(0.85);
     return ListTile(
       leading: Checkbox(
         value: todo.completed,
         onChanged: (_) => context.read<TodoListCubit>().toggleTodo(todo.id),
       ),
-      title: Text(
+      title: TextWidget(
         todo.desc,
-        style: TextStyle(
-          decoration: todo.completed ? TextDecoration.lineThrough : null,
-          color: todo.completed ? textColor.withOpacity(0.5) : textColor,
-        ),
+        TextType.titleMedium,
+        color: textColor,
       ),
     );
   }
